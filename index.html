@@ -47,6 +47,43 @@
 }
 </script>
     <script type="module" src="./index.tsx"></script>
+    <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+      <source src="https://assets.mixkit.co/music/preview/mixkit-serene-view-441.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <script>
+      // Force volume and unmute on first interaction
+      function unlockAudio() {
+        const audio = document.getElementById('bg-music');
+        if (audio) {
+          audio.muted = false;
+          audio.volume = 1.0;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log("Audio unlocked by user interaction");
+            }).catch((e) => {
+              console.log("Audio unlock failed:", e);
+            });
+          }
+        }
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+      }
+      window.addEventListener('click', unlockAudio);
+      window.addEventListener('touchstart', unlockAudio);
+      window.addEventListener('keydown', unlockAudio);
+
+      // Check for audio failures periodically
+      setInterval(() => {
+        const audio = document.getElementById('bg-music');
+        if (audio && !audio.paused && audio.muted) {
+          audio.muted = false;
+          audio.volume = 1.0;
+        }
+      }, 1000);
+    </script>
   </head>
   <body>
     <div id="root"></div>

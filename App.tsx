@@ -20,27 +20,29 @@ const App: React.FC = () => {
     })), []);
 
   useEffect(() => {
-    audioRef.current = new Audio(AMBIENT_MUSIC_URL);
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.4;
-    audioRef.current.muted = true;
-    
-    // Attempt to play immediately (might be blocked by browser)
-    audioRef.current.play().catch(() => {
-      console.log("Autoplay blocked, waiting for interaction");
-    });
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
+    const audio = document.getElementById('bg-music') as HTMLAudioElement;
+    if (audio) {
+      audioRef.current = audio;
+      audio.volume = 0.4;
+      // Initialize state from actual audio state
+      setIsMuted(audio.muted);
+      
+      // Auto-play attempt on mount
+      const playOnMount = () => {
+        audio.play().catch(() => {
+          console.log("Autoplay still blocked, waiting for interaction");
+        });
+      };
+      playOnMount();
+    }
   }, []);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = isMuted;
+      if (!isMuted) {
+        audioRef.current.play().catch(e => console.warn("Mute toggle play failed:", e));
+      }
     }
   }, [isMuted]);
 
@@ -49,7 +51,37 @@ const App: React.FC = () => {
     if (audioRef.current) {
       audioRef.current.muted = false;
       setIsMuted(false);
-      audioRef.current.play().catch(e => console.warn("Audio play blocked or failed", e));
+      audioRef.current.volume = 1.0; // Max volume for testing
+      
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log("Playback started successfully");
+        }).catch(e => {
+          console.warn("Audio play failed, retrying on next interaction:", e);
+          const retryPlay = () => {
+            if (audioRef.current) {
+              audioRef.current.muted = false;
+              setIsMuted(false);
+              audioRef.current.volume = 1.0;
+              audioRef.current.play().then(() => {
+                console.log("Retry playback success");
+              });
+            }
+          };
+          window.addEventListener('click', retryPlay, { once: true });
+          window.addEventListener('touchstart', retryPlay, { once: true });
+          window.addEventListener('keydown', retryPlay, { once: true });
+        });
+      }
+    } else {
+      // Fallback if audioRef.current is not set for some reason
+      const audio = document.getElementById('bg-music') as HTMLAudioElement;
+      if (audio) {
+        audio.muted = false;
+        audio.volume = 1.0;
+        audio.play().catch(() => {});
+      }
     }
   };
 
