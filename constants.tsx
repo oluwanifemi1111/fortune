@@ -36,5 +36,5 @@ export const LETTER_CONTENT: LetterParagraph[] = [
   { text: "Because the world may not always understand your chaos… but it needs your light." }
 ];
 
-// Using a more reliable royalty-free cinematic track URL
-export const AMBIENT_MUSIC_URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; // Placeholder for emotional piano, replace with Klara's favorite if known
+// Using a stable, high-availability cinematic audio source
+export const AMBIENT_MUSIC_URL = "https://cdn.pixabay.com/audio/2022/10/16/audio_138f36c53e.mp3"; 
