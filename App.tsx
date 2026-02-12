@@ -7,7 +7,7 @@ import { MusicToggle } from './components/MusicToggle';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.LOCKED);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Background particle positions (memoized to prevent re-renders)
@@ -23,7 +23,13 @@ const App: React.FC = () => {
     audioRef.current = new Audio(AMBIENT_MUSIC_URL);
     audioRef.current.loop = true;
     audioRef.current.volume = 0.4;
+    audioRef.current.muted = true;
     
+    // Attempt to play immediately (might be blocked by browser)
+    audioRef.current.play().catch(() => {
+      console.log("Autoplay blocked, waiting for interaction");
+    });
+
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -41,6 +47,8 @@ const App: React.FC = () => {
   const handleReveal = () => {
     setAppState(AppState.INTRO);
     if (audioRef.current) {
+      audioRef.current.muted = false;
+      setIsMuted(false);
       audioRef.current.play().catch(e => console.warn("Audio play blocked or failed", e));
     }
   };
