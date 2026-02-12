@@ -1,7 +1,5 @@
 {
   "name": "Klara's Birthday Journey",
   "description": "A cinematic, emotional digital letter experience for Klara, featuring smooth animations, ambient music, and interactive reveals.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }

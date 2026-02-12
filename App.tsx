@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -87,7 +86,7 @@ const App: React.FC = () => {
           <motion.div
             key={i}
             className="absolute bg-white rounded-full opacity-20"
-            style={{ top: p.top, left: p.left, width: p.size, height: p.size }}
+            style={{ top: p.top, left: p.left, width: `${p.size}px`, height: `${p.size}px` }}
             animate={{
               y: [0, -40, 0],
               opacity: [0.1, 0.4, 0.1],
@@ -131,19 +130,16 @@ const App: React.FC = () => {
               onClick={handleReveal}
               className="relative w-28 h-28 rounded-full flex items-center justify-center group outline-none"
             >
-              {/* Outer Glow */}
               <motion.div 
                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 rounded-full bg-white/5 blur-xl group-hover:bg-white/10"
               />
-              {/* Middle Circle */}
               <motion.div 
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-2 rounded-full border border-white/20 group-hover:border-white/40"
               />
-              {/* Inner Orb */}
               <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-white/10 to-white/30 backdrop-blur-sm border border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-white/80 shadow-[0_0_10px_white]" />
               </div>
@@ -191,10 +187,6 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-/** 
- * Sub-components for better organization 
- */
 
 const IntroSequence: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
