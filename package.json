@@ -2,11 +2,23 @@
   "name": "klaras-birthday",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5000",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "framer-motion": "11.11.17",
-    "canvas-confetti": "1.9.3",
-    "lucide-react": "0.475.0"
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^25.2.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "canvas-confetti": "^1.9.3",
+    "framer-motion": "^11.11.17",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
